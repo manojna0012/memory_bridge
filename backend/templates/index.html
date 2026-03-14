@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>MemoryBridge</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<h1>MemoryBridge</h1>
+
+<video id="video" width="300" autoplay></video>
+
+<br><br>
+
+<button onclick="capture()">Who is this?</button>
+
+<script>
+
+navigator.mediaDevices.getUserMedia({video:true})
+.then(stream=>{
+document.getElementById("video").srcObject = stream
+})
+
+function capture(){
+
+let canvas = document.createElement("canvas")
+canvas.width = video.videoWidth
+canvas.height = video.videoHeight
+
+let ctx = canvas.getContext("2d")
+ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
+
+canvas.toBlob(blob=>{
+
+let form = new FormData()
+form.append("image",blob)
+
+fetch("/detect",{method:"POST",body:form})
+.then(res=>res.json())
+.then(data=>{
+alert(data.result)
+})
+
+})
+
+}
+
+</script>
+
+<div id="chatbot">
+    <div id="chat-header" onclick="toggleChat()">MemoryBridge Assistant</div>
+
+    <div id="chat-body">
+        <div id="chat-messages"></div>
+
+        <input id="chat-input" type="text" placeholder="Ask something...">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+</div>
+
+</body>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</html>

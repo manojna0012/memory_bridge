@@ -1,0 +1,157 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Sans:wght@400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ===============================
+   COLOR SYSTEM
+================================ */
+@layer base {
+  :root {
+
+    /* Main background */
+    --background: 40 33% 98%;
+    --foreground: 220 25% 12%;
+
+    /* Cards */
+    --card: 0 0% 100%;
+    --card-foreground: 220 25% 12%;
+
+    /* Primary (MemoryBridge green) */
+    --primary: 174 62% 38%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Secondary warm accent */
+    --secondary: 28 80% 52%;
+    --secondary-foreground: 0 0% 100%;
+
+    /* Muted text */
+    --muted: 40 20% 94%;
+    --muted-foreground: 220 10% 46%;
+
+    /* Accent backgrounds */
+    --accent: 174 40% 92%;
+    --accent-foreground: 174 62% 28%;
+
+    /* UI borders */
+    --border: 40 15% 88%;
+    --input: 40 15% 88%;
+
+    /* Destructive */
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+
+    /* Radius */
+    --radius: 0.75rem;
+
+    /* Custom palette used in cards */
+    --warm-cream: 40 33% 96%;
+    --warm-peach: 28 60% 94%;
+
+    --teal-light: 174 40% 95%;
+    --teal-medium: 174 45% 85%;
+    --teal-dark: 174 62% 25%;
+
+    --amber: 38 92% 50%;
+    --amber-light: 38 80% 94%;
+
+    /* Fonts */
+    --font-heading: 'Outfit', sans-serif;
+    --font-body: 'DM Sans', sans-serif;
+
+    /* Shadows */
+    --shadow-soft: 0 4px 20px -4px hsl(220 25% 12% / 0.08);
+    --shadow-card: 0 8px 30px -8px hsl(174 62% 38% / 0.12);
+    --shadow-glow: 0 0 40px hsl(174 62% 38% / 0.15);
+  }
+}
+
+/* ===============================
+   BASE STYLES
+================================ */
+
+@layer base {
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-body);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+  }
+
+}
+
+/* ===============================
+   UTILITIES
+================================ */
+
+@layer utilities {
+
+  .text-gradient-primary {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(
+      135deg,
+      hsl(var(--primary)),
+      hsl(var(--teal-dark))
+    );
+  }
+
+  .text-gradient-warm {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(
+      135deg,
+      hsl(var(--secondary)),
+      hsl(var(--amber))
+    );
+  }
+
+  /* Background helpers used in quick action cards */
+
+  .bg-warm-cream {
+    background-color: hsl(var(--warm-cream));
+  }
+
+  .bg-warm-peach {
+    background-color: hsl(var(--warm-peach));
+  }
+
+  .bg-teal-light {
+    background-color: hsl(var(--teal-light));
+  }
+
+  .bg-teal-medium {
+    background-color: hsl(var(--teal-medium));
+  }
+
+  .bg-amber-light-custom {
+    background-color: hsl(var(--amber-light));
+  }
+
+  /* Shadows */
+
+  .shadow-soft {
+    box-shadow: var(--shadow-soft);
+  }
+
+  .shadow-card {
+    box-shadow: var(--shadow-card);
+  }
+
+  .shadow-glow {
+    box-shadow: var(--shadow-glow);
+  }
+
+  /* Mobile safe padding */
+
+  .safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+}
