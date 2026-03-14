@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:5000";
+const BASE_URL = "https://memorybridge-production-51a2.up.railway.app";
 
 export const getPeople = async () => {
   const res = await fetch(`${BASE_URL}/api/people`);
