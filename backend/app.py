@@ -214,15 +214,39 @@ def delete_person(id):
 @app.route("/detect", methods=["POST"])
 def detect():
     if "image" not in request.files:
-        return jsonify({"result": "No image uploaded"})
+        return jsonify({"error": "No image uploaded"})
 
     file = request.files["image"]
     img = cv2.imdecode(np.frombuffer(file.read(), np.uint8), cv2.IMREAD_COLOR)
 
-    result_message, confidence_score = model.predict(img)
-    print(f"Debug: {result_message} ({confidence_score:.2f})")
+    predicted_name, confidence_score = model.predict(img)
+    print(f"Debug: {predicted_name} ({confidence_score:.2f})")
 
-    return jsonify({"result": result_message, "speak": result_message})
+    # clean predicted name
+    predicted_name_clean = predicted_name.replace("This is", "").strip().lower()
+
+    # search person in database
+    conn = get_db()
+    person = conn.execute(
+        "SELECT name, age, relation FROM people WHERE LOWER(name)=?",
+        (predicted_name_clean,)
+    ).fetchone()
+    conn.close()
+
+    if person:
+        return jsonify({
+            "name": person["name"],
+            "age": person["age"],
+            "relation": person["relation"],
+            "speak": f"This is {person['name']}, your {person['relation']}"
+        })
+    else:
+        return jsonify({
+            "name": predicted_name,
+            "age": "",
+            "relation": "",
+            "speak": predicted_name
+        })
 
 
 # -----------------------------

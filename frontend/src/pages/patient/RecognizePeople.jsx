@@ -11,7 +11,7 @@ const RecognizePeople = () => {
   const canvasRef = useRef(null);
 
   const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState("");
+ const [person, setPerson] = useState(null);
 
   // Start camera
   const startCamera = async () => {
@@ -60,8 +60,7 @@ const RecognizePeople = () => {
         });
 
         const data = await res.json();
-
-        setResult(data.result);
+        setPerson(data);
         setLoading(false);
 
         // voice output
@@ -129,11 +128,23 @@ const RecognizePeople = () => {
 
         </div>
 
-        {result && (
-          <p className="text-lg font-medium">
-            Result: {result}
-          </p>
-        )}
+        {person && (
+  <div className="bg-card shadow-soft rounded-xl p-4 text-left space-y-1 w-64 mx-auto">
+
+    <p className="text-lg font-semibold">
+      {person.name}
+    </p>
+
+    <p className="text-sm text-muted-foreground">
+      Age: {person.age}
+    </p>
+
+    <p className="text-sm text-muted-foreground">
+      Relation: {person.relation}
+    </p>
+
+  </div>
+)}
 
       </main>
 
