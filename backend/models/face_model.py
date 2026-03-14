@@ -60,9 +60,9 @@ class FaceRecognizer:
         
         # Lower confidence = closer match. 
         # 55 is a good balance for LBPH.
-        if confidence < 70:
+        if confidence/100 < 70:
             return f"This is {name}", confidence
-        elif confidence < 85:
+        elif confidence/100 < 85:
             return f"I think this is {name}, but I'm not sure.", confidence
         else:
             return "This is someone I don't recognize", confidence
