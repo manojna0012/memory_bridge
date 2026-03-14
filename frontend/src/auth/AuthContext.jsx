@@ -3,7 +3,6 @@ import { createContext, useContext, useState, useEffect } from "react";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -13,11 +12,19 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  const login = (email, password) => {
+  // Login function supports both caregivers and patients
+  const login = (email, password, role, userId = null, name = null) => {
+    if (role === "patient") {
+      // Face login: userId and name come from backend
+      if (!userId || !name) return false;
+      const userData = { id: userId, name, role };
+      setUser(userData);
+      localStorage.setItem("memorybridge_user", JSON.stringify(userData));
+      return true;
+    }
 
-    const users =
-      JSON.parse(localStorage.getItem("memorybridge_users")) || [];
-
+    // Caregiver login: email/password
+    const users = JSON.parse(localStorage.getItem("memorybridge_users")) || [];
     const found = users.find(
       (u) => u.email === email && u.password === password
     );
@@ -31,16 +38,11 @@ export const AuthProvider = ({ children }) => {
       id: found.id,
       name: found.name,
       role: found.role,
-      email: found.email
+      email: found.email,
     };
 
     setUser(userData);
-
-    localStorage.setItem(
-      "memorybridge_user",
-      JSON.stringify(userData)
-    );
-
+    localStorage.setItem("memorybridge_user", JSON.stringify(userData));
     return true;
   };
 
@@ -50,13 +52,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider
-      value={{
-        user,
-        login,
-        logout
-      }}
-    >
+    <AuthContext.Provider value={{ user, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
